@@ -90,7 +90,13 @@ if st.session_state.message:
 # =========================
 # 問題表示
 # =========================
+# 問題が残っているかチェック
+if st.session_state.q_index >= len(quiz):
+    st.info("このステージの問題は終了しました")
+    st.stop()
+
 q = quiz[st.session_state.q_index]
+
 st.code(q["question"], language="python")
 choice = st.radio("答えを選択", q["choices"], key=f"q{st.session_state.stage}_{st.session_state.q_index}")
 
