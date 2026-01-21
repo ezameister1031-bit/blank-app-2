@@ -131,8 +131,7 @@ if st.button("回答する"):
         st.session_state.wrong_questions.append(q)
 
 
-    st.session_state.result_message = ""
-    st.session_state.result_type = ""
+    
     st.session_state.current_question = None
 
 
