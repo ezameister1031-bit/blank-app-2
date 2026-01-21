@@ -3,14 +3,32 @@ import streamlit as st
 # =========================
 # 初期化
 # =========================
+import streamlit as st
+
+# =========================
+# session_state 初期化（最重要）
+# =========================
 if "stage" not in st.session_state:
     st.session_state.stage = 1
+
+if "q_index" not in st.session_state:
     st.session_state.q_index = 0
+
+if "life" not in st.session_state:
     st.session_state.life = 3
+
+if "enemy_hp" not in st.session_state:
     st.session_state.enemy_hp = 5
+
+if "mode" not in st.session_state:
     st.session_state.mode = "game"
+
+if "message" not in st.session_state:
     st.session_state.message = ""
+
+if "wrong_questions" not in st.session_state:
     st.session_state.wrong_questions = []
+
 
 # =========================
 # 問題データ
