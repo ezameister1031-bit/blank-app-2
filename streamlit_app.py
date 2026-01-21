@@ -141,16 +141,4 @@ for choice in q["choices"]:
 # =====================
 st.info(st.session_state.message)
 
-# =====================
-# 間違えた問題一覧
-# =====================
-st.divider()
-st.subheader("📝 間違えた問題一覧")
 
-if st.session_state.wrong_questions:
-    for i, wq in enumerate(st.session_state.wrong_questions, 1):
-        st.write(f"{i}. {wq['question']}")
-        st.write(f"✅ 正解：{wq['answer']}")
-        st.divider()
-else:
-    st.write("まだ間違えた問題はありません")
