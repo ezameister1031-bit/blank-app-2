@@ -121,14 +121,20 @@ choice = st.radio("選択肢", q["choices"], key="choice")
 
 if st.button("回答する"):
     if choice == q["answer"]:
-        st.success("⭕ 正解！敵にダメージ！")
+        st.session_state.result_message = "⭕ 正解！敵にダメージ！"
+        st.session_state.result_type = "correct"
         st.session_state.enemy_hp -= 1
     else:
-        st.error("❌ 不正解… ライフが減った")
+        st.session_state.result_message = "❌ 不正解… ライフが減った"
+        st.session_state.result_type = "wrong"
         st.session_state.life -= 1
         st.session_state.wrong_questions.append(q)
 
+
+    st.session_state.result_message = ""
+    st.session_state.result_type = ""
     st.session_state.current_question = None
+
 
     # ライフチェック
     if st.session_state.life <= 0:
