@@ -43,7 +43,7 @@ st.progress(st.session_state.enemy_hp / 3)
 # -----------------------
 # ライフ表示
 # -----------------------
-st.write("❤️ ライフ:", "❤️" * st.session_state.life)
+st.write("ライフ:", "❤️" * st.session_state.life)
 
 # -----------------------
 # ゲーム終了判定
