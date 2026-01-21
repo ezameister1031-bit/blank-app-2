@@ -1,132 +1,146 @@
 import streamlit as st
 import random
 
-# =========================
-# session_state 初期化
-# =========================
-if "stage" not in st.session_state:
-    st.session_state.stage = 1
-if "life" not in st.session_state:
-    st.session_state.life = 3
-if "enemy_hp" not in st.session_state:
-    st.session_state.enemy_hp = 5
+# ----------------------------
+# 初期化
+# ----------------------------
 if "mode" not in st.session_state:
     st.session_state.mode = "game"
+
+if "stage" not in st.session_state:
+    st.session_state.stage = 1
+
+if "enemy_hp" not in st.session_state:
+    st.session_state.enemy_hp = 5
+
+if "life" not in st.session_state:
+    st.session_state.life = 3
+
 if "wrong_questions" not in st.session_state:
     st.session_state.wrong_questions = []
+
 if "current_question" not in st.session_state:
     st.session_state.current_question = None
-if "message" not in st.session_state:
-    st.session_state.message = ""
 
-# =========================
-# 問題データ
-# =========================
-quiz_stage1 = [
+# ----------------------------
+# クイズデータ
+# ----------------------------
+stage1_quiz = [
     {
-        "question": "x = [1, 2, 3]\nprint(len(x))",
-        "choices": ["2", "3", "エラー"],
-        "answer": "3"
+        "q": "x = 5\nif x > 3:\n    print(?)",
+        "choices": ["x", "5", "True", "3"],
+        "answer": "5",
+        "explanation": "xは5なのでprint(x)で5が出力される"
     },
     {
-        "question": "x = [1,2,3]\nprint(x[-1])",
-        "choices": ["1", "3", "エラー"],
-        "answer": "3"
-    }
-]
-
-quiz_stage2 = [
+        "q": "for i in range(3):\n    print(i)\n最後に出力される数は？",
+        "choices": ["0", "1", "2", "3"],
+        "answer": "2",
+        "explanation": "range(3)は0,1,2"
+    },
     {
-        "question": "class A:\n    def __init__(self, x):\n        self.x = x\n\na = A(5)\nprint(a.x)",
-        "choices": ["5", "x", "エラー"],
-        "answer": "5"
+        "q": "x = 10\nif x == 10:\n    print('OK')",
+        "choices": ["OK", "True", "10", "エラー"],
+        "answer": "OK",
+        "explanation": "条件がTrueなのでOKが出力される"
     }
 ]
 
-quiz = quiz_stage1 if st.session_state.stage == 1 else quiz_stage2
+stage2_quiz = [
+    {
+        "q": "nums = [1,2,3]\nprint(len(nums))",
+        "choices": ["2", "3", "4", "エラー"],
+        "answer": "3",
+        "explanation": "要素は3つ"
+    },
+    {
+        "q": "for i in range(1,5,2):\n    print(i)\n最初に出る数は？",
+        "choices": ["0", "1", "2", "5"],
+        "answer": "1",
+        "explanation": "range(1,5,2)は1,3"
+    },
+    {
+        "q": "x = 3\nif x != 5:\n    print('A')",
+        "choices": ["A", "5", "False", "何も出ない"],
+        "answer": "A",
+        "explanation": "xは5ではないので条件成立"
+    }
+]
 
-# =========================
-# 復習画面
-# =========================
-if st.session_state.mode == "review":
-    st.title("📘 復習ノート")
+quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
 
-    if not st.session_state.wrong_questions:
-        st.info("まだ間違えた問題はありません")
+# ----------------------------
+# ゲームクリア画面
+# ----------------------------
+if st.session_state.mode == "clear":
+    st.title("🏆 ゲームクリア！")
+    st.success("全ステージを制覇しました！")
+
+    if st.session_state.wrong_questions:
+        st.subheader("📘 復習リスト（間違えた問題）")
+        for w in st.session_state.wrong_questions:
+            st.write("❓ 問題")
+            st.code(w["q"])
+            st.write(f"✅ 正解：{w['answer']}")
+            st.write(f"📝 解説：{w['explanation']}")
+            st.divider()
     else:
-        for i, q in enumerate(st.session_state.wrong_questions, 1):
-            st.markdown(f"### 問題 {i}")
-            st.code(q["question"], language="python")
-            st.write(f"✅ 正解：**{q['answer']}**")
+        st.success("全問正解！素晴らしい 🎉")
 
-    if st.button("⬅ ゲームに戻る"):
+    if st.button("🔄 もう一度遊ぶ"):
+        st.session_state.stage = 1
+        st.session_state.enemy_hp = 5
+        st.session_state.life = 3
+        st.session_state.wrong_questions = []
+        st.session_state.current_question = None
         st.session_state.mode = "game"
         st.rerun()
 
     st.stop()
 
-# =========================
+# ----------------------------
 # ゲーム画面
-# =========================
-st.title("🧙 PythonクイズRPG")
-st.subheader(f"Stage {st.session_state.stage}")
+# ----------------------------
+st.title(f"🧙‍♂️ PythonクイズRPG（Stage {st.session_state.stage}）")
 
-st.write("❤️ ライフ：" + "❤️" * st.session_state.life)
+st.image("fantasy_orc.png", width=250)
+
 st.write(f"👾 敵HP：{st.session_state.enemy_hp}")
+st.write(f"❤️ ライフ：{st.session_state.life}")
 
-c1, c2, c3 = st.columns([1, 2, 1])
-with c2:
-    st.image("fantasy_orc.png", width=250)
-
-# 復習ボタン
-if st.button("📘 復習する"):
-    st.session_state.mode = "review"
-    st.rerun()
-
-# メッセージ表示
-if st.session_state.message:
-    st.info(st.session_state.message)
-    st.session_state.message = ""
-
-# =========================
-# 問題出題（ランダム）
-# =========================
+# 問題をランダムに取得
 if st.session_state.current_question is None:
-    st.session_state.current_question = random.choice(quiz)
+    st.session_state.current_question = random.choice(quiz_data)
 
 q = st.session_state.current_question
 
-st.code(q["question"], language="python")
-choice = st.radio(
-    "答えを選択",
-    q["choices"],
-    key=f"choice_{q['question']}"
-)
+st.subheader("❓ 問題")
+st.code(q["q"])
 
-if st.button("決定"):
+choice = st.radio("選択肢", q["choices"], key="choice")
+
+if st.button("回答する"):
     if choice == q["answer"]:
+        st.success("⭕ 正解！敵にダメージ！")
         st.session_state.enemy_hp -= 1
-        st.session_state.message = "⚔️ 正解！敵にダメージ！"
     else:
+        st.error("❌ 不正解… ライフが減った")
         st.session_state.life -= 1
-        st.session_state.message = "💥 不正解…"
         st.session_state.wrong_questions.append(q)
 
-    # 次の問題をランダムに
-    st.session_state.current_question = random.choice(quiz)
+    st.session_state.current_question = None
 
-    # ステージ進行
+    # ライフチェック
+    if st.session_state.life <= 0:
+        st.session_state.mode = "clear"
+
+    # 敵撃破チェック
     if st.session_state.enemy_hp <= 0:
         if st.session_state.stage == 1:
-            st.success("👾 敵を倒した！ Stage2へ！")
+            st.success("👾 敵を倒した！Stage2へ！")
             st.session_state.stage = 2
             st.session_state.enemy_hp = 7
         else:
-            st.success("🏆 全ステージクリア！（続けて挑戦できます）")
-            st.session_state.enemy_hp = 7
-
-    if st.session_state.life <= 0:
-        st.error("💀 ライフがなくなりました（続けて挑戦できます）")
-        st.session_state.life = 3
+            st.session_state.mode = "clear"
 
     st.rerun()
