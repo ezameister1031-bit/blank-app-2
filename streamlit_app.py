@@ -1,12 +1,11 @@
 import streamlit as st
+import random
 
 # =========================
 # session_state 初期化
 # =========================
 if "stage" not in st.session_state:
     st.session_state.stage = 1
-if "q_index" not in st.session_state:
-    st.session_state.q_index = 0
 if "life" not in st.session_state:
     st.session_state.life = 3
 if "enemy_hp" not in st.session_state:
@@ -15,6 +14,8 @@ if "mode" not in st.session_state:
     st.session_state.mode = "game"
 if "wrong_questions" not in st.session_state:
     st.session_state.wrong_questions = []
+if "current_question" not in st.session_state:
+    st.session_state.current_question = None
 if "message" not in st.session_state:
     st.session_state.message = ""
 
@@ -77,7 +78,7 @@ c1, c2, c3 = st.columns([1, 2, 1])
 with c2:
     st.image("fantasy_orc.png", width=250)
 
-# 復習ボタン（常設）
+# 復習ボタン
 if st.button("📘 復習する"):
     st.session_state.mode = "review"
     st.rerun()
@@ -88,17 +89,19 @@ if st.session_state.message:
     st.session_state.message = ""
 
 # =========================
-# 問題表示
+# 問題出題（ランダム）
 # =========================
-# 問題が残っているかチェック
-if st.session_state.q_index >= len(quiz):
-    st.info("このステージの問題は終了しました")
-    st.stop()
+if st.session_state.current_question is None:
+    st.session_state.current_question = random.choice(quiz)
 
-q = quiz[st.session_state.q_index]
+q = st.session_state.current_question
 
 st.code(q["question"], language="python")
-choice = st.radio("答えを選択", q["choices"], key=f"q{st.session_state.stage}_{st.session_state.q_index}")
+choice = st.radio(
+    "答えを選択",
+    q["choices"],
+    key=f"choice_{q['question']}"
+)
 
 if st.button("決定"):
     if choice == q["answer"]:
@@ -109,15 +112,21 @@ if st.button("決定"):
         st.session_state.message = "💥 不正解…"
         st.session_state.wrong_questions.append(q)
 
-    st.session_state.q_index += 1
+    # 次の問題をランダムに
+    st.session_state.current_question = random.choice(quiz)
 
+    # ステージ進行
     if st.session_state.enemy_hp <= 0:
         if st.session_state.stage == 1:
             st.success("👾 敵を倒した！ Stage2へ！")
             st.session_state.stage = 2
-            st.session_state.q_index = 0
             st.session_state.enemy_hp = 7
         else:
-            st.success("🏆 全ステージクリア！")
+            st.success("🏆 全ステージクリア！（続けて挑戦できます）")
+            st.session_state.enemy_hp = 7
+
+    if st.session_state.life <= 0:
+        st.error("💀 ライフがなくなりました（続けて挑戦できます）")
+        st.session_state.life = 3
 
     st.rerun()
