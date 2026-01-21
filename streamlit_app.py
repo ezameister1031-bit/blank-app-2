@@ -36,7 +36,7 @@ st.title("⚔️ Python Quiz RPG")
 # -----------------------
 # 敵表示
 # -----------------------
-st.image("enemy.png", width=250)
+st.image("fantasy_orc.png", width=250)
 st.write("👾 敵HP")
 st.progress(st.session_state.enemy_hp / 3)
 
