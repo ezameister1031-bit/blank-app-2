@@ -16,7 +16,7 @@ def init_state():
         "result_type": "",
         "answered": False,
         "next_stage": 2,
-
+        "bgm_on": True,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -128,10 +128,21 @@ else:
 # ----------------------------
 # BGM（Stageごと）
 # ----------------------------
-if st.session_state.stage == 1:
-    st.audio("maou_game_medley02.mp3", loop=True)
-elif st.session_state.stage == 2:
-    st.audio("maou_game_lastboss04.mp3", loop=True)
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("🔊 BGM ON"):
+        st.session_state.bgm_on = True
+
+with col2:
+    if st.button("🔇 BGM OFF"):
+        st.session_state.bgm_on = False
+
+if st.session_state.bgm_on:
+    if st.session_state.stage == 1:
+        st.audio("maou_game_medley02.mp3", loop=True)
+    elif st.session_state.stage == 2:
+        st.audio("maou_game_lastboss04.mp3", loop=True)
 
 
 # 敵画像の表示（ステージごとに変更）
