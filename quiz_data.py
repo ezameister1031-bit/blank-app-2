@@ -392,4 +392,84 @@ stage2_quiz = [
     "answer": "6",
     "explanation": "6文字"
 },
+
+# Boss 1
+{
+    "q": "nums = [1, 2, 3, 4, 5]\nresult = 0\nfor n in nums:\n    if n % 2 == 0:\n        result += n\n    else:\n        result -= n\nprint(result)",
+    "choices": ["-3", "-1", "1", "3"],
+    "answer": "-3",
+    "explanation": "偶数:+2,+4 奇数:-1,-3,-5 → -3"
+},
+
+# Boss 2
+{
+    "q": "x = 1\ncount = 0\nwhile x < 50:\n    x *= 3\n    count += 1\nprint(count)",
+    "choices": ["3", "4", "5", "6"],
+    "answer": "4",
+    "explanation": "1→3→9→27→81（4回）"
+},
+
+# Boss 3
+{
+    "q": "data = [10, 20, 30, 40]\nfor i in range(len(data)):\n    if data[i] == 30:\n        data[i] = 99\nprint(data)",
+    "choices": ["[10,20,30,40]", "[10,20,99,40]", "[99,20,30,40]", "エラー"],
+    "answer": "[10,20,99,40]",
+    "explanation": "30だけ99に置き換え"
+},
+
+# Boss 4
+{
+    "q": "scores = {'A':50,'B':80,'C':65}\npassed = []\nfor k,v in scores.items():\n    if v >= 70:\n        passed.append(k)\nprint(passed)",
+    "choices": ["['A']", "['B']", "['B','C']", "[]"],
+    "answer": "['B']",
+    "explanation": "70以上はBのみ"
+},
+
+# Boss 5
+{
+    "q": "def f(nums):\n    total = 0\n    for n in nums:\n        if n < 0:\n            continue\n        total += n\n    return total\n\nprint(f([1, -2, 3, -4, 5]))",
+    "choices": ["3", "6", "9", "エラー"],
+    "answer": "9",
+    "explanation": "負の数は無視 → 1+3+5"
+},
+
+# Boss 6
+{
+    "q": "def g(x):\n    if x == 0:\n        return 1\n    return x * g(x-1)\n\nprint(g(4))",
+    "choices": ["4", "12", "24", "エラー"],
+    "answer": "24",
+    "explanation": "再帰で4! = 24"
+},
+
+# Boss 7
+{
+    "q": "nums = [1,2,3]\nnew = []\nfor n in nums:\n    new.append(n*2)\nnums.append(4)\nprint(new)",
+    "choices": ["[2,4,6,8]", "[2,4,6]", "[1,2,3,4]", "エラー"],
+    "answer": "[2,4,6]",
+    "explanation": "newはnums追加前に作成"
+},
+
+# Boss 8
+{
+    "q": "x = 0\nfor i in range(5):\n    for j in range(5):\n        if i == j:\n            x += 1\nprint(x)",
+    "choices": ["5", "10", "15", "25"],
+    "answer": "5",
+    "explanation": "i==jは0〜4で5回"
+},
+
+# Boss 9
+{
+    "q": "def f(a, b=2):\n    return a * b\n\nprint(f(3) + f(3, 4))",
+    "choices": ["12", "18", "24", "エラー"],
+    "answer": "18",
+    "explanation": "3*2 + 3*4 = 6+12"
+},
+
+# Boss 10（ラスボス感）
+{
+    "q": "nums = [1,2,3,4,5]\nresult = []\nfor i in range(len(nums)):\n    if i % 2 == 0:\n        result.append(nums[i])\nprint(result)",
+    "choices": ["[1,2,3,4,5]", "[1,3,5]", "[2,4]", "[0,2,4]"],
+    "answer": "[1,3,5]",
+    "explanation": "偶数インデックスの値を取得"
+},
 ]
