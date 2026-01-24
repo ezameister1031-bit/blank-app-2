@@ -119,11 +119,24 @@ if st.session_state.mode == "clear":
 # ----------------------------
 # ゲーム画面
 # ----------------------------
-st.title(f"🧙‍♂️ PythonクイズRPG（Stage {st.session_state.stage}）")
+if st.session_state.stage == 2:
+    st.title("🔥 BOSS BATTLE 🔥 PythonクイズRPG")
+else:
+    st.title(f"🧙‍♂️ PythonクイズRPG（Stage {st.session_state.stage}）")
 
-st.image("fantasy_orc.png", width=250)
 
-st.write(f"👾 敵HP：{st.session_state.enemy_hp}")
+# 敵画像の表示（ステージごとに変更）
+if st.session_state.stage == 1:
+    st.image("fantasy_orc.png", width=250)
+else:
+    st.image("fantasy_maou_devil.png", width=300)
+
+
+if st.session_state.stage == 2:
+    st.write(f"😈 魔王HP：{st.session_state.enemy_hp}")
+else:
+    st.write(f"👾 敵HP：{st.session_state.enemy_hp}")
+
 st.write(f"❤️ ライフ：{st.session_state.life}")
 
 # 問題をランダム取得
