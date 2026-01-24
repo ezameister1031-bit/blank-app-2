@@ -125,6 +125,14 @@ if st.session_state.stage == 2:
 else:
     st.title(f"🧙‍♂️ PythonクイズRPG（Stage {st.session_state.stage}）")
 
+# ----------------------------
+# BGM（Stageごと）
+# ----------------------------
+if st.session_state.stage == 1:
+    st.audio("maou_game_medley02.mp3", loop=True)
+elif st.session_state.stage == 2:
+    st.audio("maou_game_lastboss04.mp3", loop=True)
+
 
 # 敵画像の表示（ステージごとに変更）
 if st.session_state.stage == 1:
