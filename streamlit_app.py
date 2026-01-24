@@ -97,6 +97,7 @@ if st.session_state.mode == "stage_clear":
 
 if st.session_state.mode == "clear":
     st.title("🏆 ゲームクリア！")
+    st.balloons()
     st.success("全ステージを制覇しました！")
 
     if st.session_state.wrong_questions:
