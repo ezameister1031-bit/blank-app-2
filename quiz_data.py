@@ -161,4 +161,235 @@ stage2_quiz = [
         "answer": "A",
         "explanation": "xは5ではないので条件成立"
     },
+    {
+    "q": "nums = [2, 4, 6, 8]\ntotal = 0\nfor n in nums:\n    if n > 4:\n        total += n\nprint(total)",
+    "choices": ["6", "8", "14", "20"],
+    "answer": "14",
+    "explanation": "6と8を足すので14"
+    },
+
+    # 2
+    {
+    "q": "count = 0\nx = 1\nwhile x < 20:\n    x *= 2\n    count += 1\nprint(count)",
+    "choices": ["3", "4", "5", "6"],
+    "answer": "5",
+    "explanation": "1→2→4→8→16→32 の5回"
+    },
+
+    # 3
+    {
+    "q": "data = [1, 3, 5]\ndata.append(7)\ndata.pop(1)\nprint(data)",
+    "choices": ["[1,3,5,7]", "[1,5,7]", "[3,5,7]", "[1,3,7]"],
+    "answer": "[1,5,7]",
+    "explanation": "index1の3が削除される"
+    },
+
+    # 4
+    {
+    "q": "scores = {'A':70,'B':55,'C':90}\nfor k,v in scores.items():\n    if v < 60:\n        print(k)",
+    "choices": ["A", "B", "C", "何も表示されない"],
+    "answer": "B",
+    "explanation": "60未満はBのみ"
+    },
+
+# 5
+    {
+    "q": "nums = [1,2,3,4,5]\nresult = []\nfor n in nums:\n    if n % 2 == 0:\n        result.append(n)\nprint(result)",
+    "choices": ["[1,3,5]", "[2,4]", "[1,2,3,4,5]", "[]"],
+    "answer": "[2,4]",
+    "explanation": "偶数のみ抽出"
+    },
+
+# 6
+    {
+    "q": "nums = [1,2,3]\nprint(nums[3])",
+    "choices": ["3", "None", "エラー", "0"],
+    "answer": "エラー",
+    "explanation": "存在しないインデックス"
+    },
+
+# 7
+    {
+    "q": "for i in range(1,6):\n    print(i)\n何回表示される？",
+    "choices": ["4", "5", "6", "無限"],
+    "answer": "5",
+    "explanation": "6は含まれない"
+    },
+
+# 8
+    {
+    "q": "for i in range(5):\n    if i == 3:\n        break\n    print(i)",
+    "choices": ["0 1 2", "0 1 2 3", "1 2 3", "0 1 2 3 4"],
+    "answer": "0 1 2",
+    "explanation": "3でbreak"
+    },
+
+# 9
+    {
+    "q": "for i in range(4):\n    if i == 2:\n        continue\n    print(i)",
+    "choices": ["0 1 2 3", "0 1 3", "2", "1 3"],
+    "answer": "0 1 3",
+    "explanation": "2はスキップ"
+    },
+
+# 10
+{
+    "q": "def f(x):\n    return x * 2\nprint(f(3))",
+    "choices": ["3", "6", "None", "エラー"],
+    "answer": "6",
+    "explanation": "returnの値が表示される"
+},
+
+# 11
+{
+    "q": "def f():\n    x = 10\nprint(f())",
+    "choices": ["10", "None", "エラー", "何も表示されない"],
+    "answer": "None",
+    "explanation": "returnがない関数はNone"
+},
+
+# 12
+{
+    "q": "a = [1,2,3]\ndef add(lst):\n    lst.append(4)\nadd(a)\nprint(a)",
+    "choices": ["[1,2,3]", "[4]", "[1,2,3,4]", "エラー"],
+    "answer": "[1,2,3,4]",
+    "explanation": "リストは変更される"
+},
+
+# 13
+{
+    "q": "a = [1,2]\nb = a\na.append(3)\nprint(b)",
+    "choices": ["[1,2]", "[1,2,3]", "[3]", "エラー"],
+    "answer": "[1,2,3]",
+    "explanation": "同じ参照"
+},
+
+# 14
+{
+    "q": "data = {'x':1}\ndata['y'] = data['x'] + 2\nprint(data)",
+    "choices": ["{'x':1}", "{'y':3}", "{'x':3,'y':2}", "{'x':1,'y':3}"],
+    "answer": "{'x':1,'y':3}",
+    "explanation": "yが追加される"
+},
+
+# 15
+{
+    "q": "count = 0\nfor i in range(3):\n    for j in range(2):\n        count += 1\nprint(count)",
+    "choices": ["3", "5", "6", "9"],
+    "answer": "6",
+    "explanation": "3×2"
+},
+
+# 16
+{
+    "q": "nums = [5,12,20,3]\ncount = 0\nfor n in nums:\n    if n > 10:\n        count += 1\nprint(count)",
+    "choices": ["1", "2", "3", "4"],
+    "answer": "2",
+    "explanation": "12と20"
+},
+
+# 17
+{
+    "q": "nums = [3,7,2]\nm = nums[0]\nfor n in nums:\n    if n > m:\n        m = n\nprint(m)",
+    "choices": ["3", "7", "2", "エラー"],
+    "answer": "7",
+    "explanation": "最大値探索"
+},
+
+# 18
+{
+    "q": "x = 5\nif x > 3 and x < 10:\n    print('OK')",
+    "choices": ["OK", "5", "True", "何も出ない"],
+    "answer": "OK",
+    "explanation": "両条件成立"
+},
+
+# 19
+{
+    "q": "x = 2\nif x < 3 or x > 10:\n    print('YES')",
+    "choices": ["YES", "2", "False", "何も出ない"],
+    "answer": "YES",
+    "explanation": "or条件"
+},
+
+# 20
+{
+    "q": "data = {'a':1,'b':2,'c':3}\nprint(len(data))",
+    "choices": ["2", "3", "4", "エラー"],
+    "answer": "3",
+    "explanation": "キー数"
+},
+
+# 21〜50（少しテンポ良く難易度UP）
+# ※ 実際の授業・ゲームでちょうど良い引っかけレベル
+
+{
+    "q": "print(bool(0))",
+    "choices": ["True", "False", "0", "エラー"],
+    "answer": "False",
+    "explanation": "0はFalse"
+},
+
+{
+    "q": "print(bool(''))",
+    "choices": ["True", "False", "None", "エラー"],
+    "answer": "False",
+    "explanation": "空文字はFalse"
+},
+
+{
+    "q": "x = [1,2,3]\nprint(2 in x)",
+    "choices": ["True", "False", "2", "エラー"],
+    "answer": "True",
+    "explanation": "含まれている"
+},
+
+{
+    "q": "x = [1,2,3]\nx.remove(2)\nprint(x)",
+    "choices": ["[1,2,3]", "[1,3]", "[2]", "エラー"],
+    "answer": "[1,3]",
+    "explanation": "値2を削除"
+},
+
+{
+    "q": "print('A' * 3)",
+    "choices": ["AAA", "A3", "エラー", "None"],
+    "answer": "AAA",
+    "explanation": "文字列の繰り返し"
+},
+
+{
+    "q": "print(5 // 2)",
+    "choices": ["2", "2.5", "3", "エラー"],
+    "answer": "2",
+    "explanation": "整数除算"
+},
+
+{
+    "q": "print(5 % 2)",
+    "choices": ["1", "2", "0", "エラー"],
+    "answer": "1",
+    "explanation": "余り"
+},
+
+{
+    "q": "x = 10\nx += 3\nprint(x)",
+    "choices": ["10", "13", "7", "エラー"],
+    "answer": "13",
+    "explanation": "加算代入"
+},
+
+{
+    "q": "print(type(3.0))",
+    "choices": ["int", "float", "str", "エラー"],
+    "answer": "float",
+    "explanation": "小数はfloat"
+},
+
+{
+    "q": "print(len('Python'))",
+    "choices": ["5", "6", "7", "エラー"],
+    "answer": "6",
+    "explanation": "6文字"
+},
 ]
