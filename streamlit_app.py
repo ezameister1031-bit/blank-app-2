@@ -15,6 +15,8 @@ def init_state():
         "result_message": "",
         "result_type": "",
         "answered": False,
+        "next_stage": 2,
+
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -72,6 +74,27 @@ quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
 # ----------------------------
 # ゲームクリア画面
 # ----------------------------
+# ----------------------------
+# ステージクリア画面
+# ----------------------------
+if st.session_state.mode == "stage_clear":
+    st.title("🎉 Stage1 クリア！")
+    st.success("おめでとうございます！Stage1を突破しました！")
+
+    st.write("次はさらに難しい問題が待っています…🔥")
+
+    if st.button("➡ Stage2へ進む"):
+        st.session_state.stage = st.session_state.next_stage
+        st.session_state.enemy_hp = 7
+        st.session_state.current_question = None
+        st.session_state.result_message = ""
+        st.session_state.result_type = ""
+        st.session_state.answered = False
+        st.session_state.mode = "game"
+        st.rerun()
+
+    st.stop()
+
 if st.session_state.mode == "clear":
     st.title("🏆 ゲームクリア！")
     st.success("全ステージを制覇しました！")
@@ -155,8 +178,8 @@ if st.session_state.answered:
 
         if st.session_state.enemy_hp <= 0:
             if st.session_state.stage == 1:
-                st.session_state.stage = 2
-                st.session_state.enemy_hp = 7
+                st.session_state.mode = "stage_clear"
+                st.session_state.next_stage = 2
             else:
                 st.session_state.mode = "clear"
 
