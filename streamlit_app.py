@@ -130,7 +130,12 @@ if st.session_state.mode == "game_over":
 
     st.write("でも大丈夫。間違えた問題を復習して、もう一度挑戦しよう🔥")
 
-    st.divider()
+    st.subheader("📘 復習（間違えた問題）")
+    for w in st.session_state.wrong_questions:
+        st.code(w["q"])
+        st.write(f"✅ 正解：{w['answer']}")
+        st.write(f"📝 解説：{w['explanation']}")
+        st.divider()
 
     if st.button("🔁 最初からやり直す"):
         for key in list(st.session_state.keys()):
