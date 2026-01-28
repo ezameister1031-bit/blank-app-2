@@ -1,6 +1,6 @@
 # 🧙‍♂️ PythonクイズRPG
 
-Streamlit を使用して作成した、/n
+Streamlit を使用して作成した、  
 **ゲーム感覚で Python を学べるクイズRPGアプリ**です。  
 4択クイズに答えて敵を倒し、ステージクリアを目指します。  
 間違えた問題は自動的に記録され、復習モードで重点的に学習できます。
@@ -9,8 +9,6 @@ Streamlit を使用して作成した、/n
 
 ## 🌐 URL
 以下のURLからすぐにプレイできます  
-（スリープ状態の場合は青色の「起動」ボタンを押してください）
-
 
 (https://blank-app-cxyqhjr2tjf.streamlit.app/)
 
@@ -55,6 +53,24 @@ pip install streamlit supabase
 ```bash
 streamlit run streamlit_app.py
 ```
+
+---
+## 問題データについて  
+問題のデータは`quiz_data.py`に保管されています。
+- Stage1→stage1_quizから出題
+- Stage2→stage2_quizから出題
+
+**quiz_data.py のフォーマット例:**
+#### quiz_data.py のフォーマット例
+
+| キー名 | 内容 | 例 |
+| :--- | :--- | :--- |
+| id | 問題ID（ステージ＋連番） | S1-001 |
+| q | 問題文（Pythonコードを含む） | x = 5<br>if x &gt; 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print(x) |
+| choices | 選択肢（4択） | ["3", "5", "True", "x"] |
+| answer | 正解の選択肢 | "5" |
+| explanation | 解説文 | xは5なのでprint(x)で5が出力される |
+
 
 ---
 ## 📊 データの仕組み
