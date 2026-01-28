@@ -124,6 +124,26 @@ if st.session_state.mode == "clear":
 
     st.stop()
 
+if st.session_state.mode == "game_over":
+    st.title("💀 GAME OVER")
+    st.error("ライフがなくなってしまった…")
+
+    st.write("でも大丈夫。間違えた問題を復習して、もう一度挑戦しよう🔥")
+
+    st.divider()
+
+    if st.button("🔁 最初からやり直す"):
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.rerun()
+
+    if st.button("📖 復習モードへ"):
+        st.session_state.mode = "review"
+        st.rerun()
+
+    st.stop()
+
+
 if st.session_state.mode == "review":
     st.title("📖 復習モード")
     st.write("間違えた回数が多い問題から優先的に復習しよう🔥")
@@ -269,7 +289,8 @@ if st.session_state.answered:
         st.session_state.answered = False
 
         if st.session_state.life <= 0:
-            st.session_state.mode = "clear"
+            st.session_state.mode = "game_over"
+
 
         if st.session_state.enemy_hp <= 0:
             if st.session_state.stage == 1:
