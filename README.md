@@ -52,7 +52,7 @@ pip install streamlit supabase
 2.アプリの起動
 以下のコマンドでアプリを起動します。
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 *クイズデータはアプリ内にquiz_data.pyという形で保管されています。
 
@@ -61,10 +61,11 @@ streamlit run app.py
 
 このアプリは **Supabase** を使用して学習履歴を管理しています。
 保存される内容は以下の通りです。
-*問題ID
-*問題文
-*ステージ番号
-*間違えた回数
+
+* **問題ID**
+* **問題文**
+* **間違えた回数**
+
 これにより、
 「どの問題を何回間違えたか」を可視化し、
 復習モードで苦手な問題から優先的に学習できます。
@@ -72,8 +73,20 @@ streamlit run app.py
 ---
 
 ## 💻 使用技術
+* **Python**
+* **UI・画面表示**: [Streamlit](https://streamlit.io/)
+* **学習履歴データ管理**: [Supabase](https://supabase.com/)
 
-* **Frontend/UI**: [Streamlit](https://streamlit.io/)
-* **Database**: [Supabase](https://supabase.com/)
+---
+
+## ▶ 今後のロードマップ
+
+今後、以下のような機能追加を予定しています。
+
+- 正解率やプレイ履歴のグラフ表示
+- ステージ・問題数の追加
+- 難易度選択機能
+- ユーザー別の学習履歴管理
+- 制限時間付きクイズモード
 
 ---
