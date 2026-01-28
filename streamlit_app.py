@@ -30,7 +30,7 @@ def init_state():
             st.session_state[k] = v
 
 init_state()
-
+#モード選択（左側に表示）
 st.sidebar.title("📚 メニュー")
 
 if st.sidebar.button("🎮 ゲームに戻る"):
@@ -78,12 +78,8 @@ def load_ranking():
 
 quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
 
-# ----------------------------
-# ゲームクリア画面
-# ----------------------------
-# ----------------------------
-# ステージクリア画面
-# ----------------------------
+
+#ステージ１クリア画面
 if st.session_state.mode == "stage_clear":
     st.title("🎉 Stage1 クリア！")
     st.success("おめでとうございます！Stage1を突破しました！")
@@ -101,7 +97,8 @@ if st.session_state.mode == "stage_clear":
         st.rerun()
 
     st.stop()
-
+    
+#ゲームクリア画面
 if st.session_state.mode == "clear":
     st.title("🏆 ゲームクリア！")
     st.balloons()
@@ -127,6 +124,7 @@ if st.session_state.mode == "clear":
         st.rerun()
 
     st.stop()
+#ゲームオーバー画面
 
 if st.session_state.mode == "game_over":
     st.title("💀 GAME OVER")
@@ -152,7 +150,7 @@ if st.session_state.mode == "game_over":
 
     st.stop()
 
-
+#復習モード
 if st.session_state.mode == "review":
     st.title("📖 復習モード")
     st.write("間違えた回数が多い問題から優先的に復習しよう🔥")
@@ -217,6 +215,7 @@ else:
 # ----------------------------
 col1, col2 = st.columns(2)
 
+#BGMのONOFF選択
 with col1:
     if st.button("🔊 BGM ON"):
         st.session_state.bgm_on = True
@@ -225,6 +224,7 @@ with col2:
     if st.button("🔇 BGM OFF"):
         st.session_state.bgm_on = False
 
+#BGM選択（ステージごとに違う）
 if st.session_state.bgm_on:
     if st.session_state.stage == 1:
         st.audio("maou_game_medley02.mp3", loop=True)
