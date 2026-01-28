@@ -1,6 +1,7 @@
 # 🧙‍♂️ PythonクイズRPG
 
-Streamlit を使用して作成した、**ゲーム感覚で Python を学べるクイズRPGアプリ**です。  
+Streamlit を使用して作成した、
+**ゲーム感覚で Python を学べるクイズRPGアプリ**です。  
 4択クイズに答えて敵を倒し、ステージクリアを目指します。  
 間違えた問題は自動的に記録され、復習モードで重点的に学習できます。
 
@@ -11,8 +12,6 @@ Streamlit を使用して作成した、**ゲーム感覚で Python を学べる
 （スリープ状態の場合は青色の「起動」ボタンを押してください）
 
 
-
-[![Open in Streamlit]
 (https://blank-app-cxyqhjr2tjf.streamlit.app/)
 
 
@@ -49,7 +48,7 @@ Streamlit を使用して作成した、**ゲーム感覚で Python を学べる
 pip install streamlit supabase
 ```
 
-2.アプリの起動
+#### 2.アプリの起動
 以下のコマンドでアプリを起動します。
 ```bash
 streamlit run streamlit_app.py
