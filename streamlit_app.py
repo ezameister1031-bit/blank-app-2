@@ -122,6 +122,10 @@ if st.session_state.mode == "clear":
             del st.session_state[key]
         st.rerun()
 
+    if st.button("📖 復習モードへ"):
+        st.session_state.mode = "review"
+        st.rerun()
+
     st.stop()
 
 if st.session_state.mode == "game_over":
