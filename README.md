@@ -50,5 +50,6 @@ pip install streamlit supabase
 
 #### 2.アプリの起動
 以下のコマンドでアプリを起動します。
+```bash
 streamlit run app.py
 
