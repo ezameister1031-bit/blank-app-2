@@ -43,11 +43,27 @@ if st.sidebar.button("📖 復習モード"):
 
 
 def save_wrong_answer(q):
-    supabase.table("wrong_answers").upsert({
-        "question_id": str(q["id"]),
-        "stage": int(q["stage"]),
-        "wrong_count": 1
-    }, on_conflict="question_id").execute()
+    res = supabase.table("wrong_answers") \
+        .select("*") \
+        .eq("question_id", q["id"]) \
+        .execute()
+
+    if res.data:
+        supabase.table("wrong_answers") \
+            .update({
+                "wrong_count": res.data[0]["wrong_count"] + 1
+            }) \
+            .eq("question_id", q["id"]) \
+            .execute()
+    else:
+        supabase.table("wrong_answers") \
+            .insert({
+                "question_id": q["id"],
+                "question_text": q["q"],
+                "stage": st.session_state.stage,
+                "wrong_count": 1
+            }) \
+            .execute()
 
 
 
