@@ -4,6 +4,13 @@ from quiz_data import stage1_quiz,stage2_quiz
 # ----------------------------
 # 初期化
 # ----------------------------
+from supabase import create_client
+
+SUPABASE_URL = "https://uidimomhqldplhtvbchz.supabase.co"
+SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZGltb21ocWxkcGxodHZiY2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjAyOTksImV4cCI6MjA4NDU5NjI5OX0.mzoug_p5WpFFQTUq-TTsffA8n7uRI77IqdZpAR5pTYg"
+
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 def init_state():
     defaults = {
         "mode": "game",
@@ -24,6 +31,47 @@ def init_state():
 
 init_state()
 
+st.sidebar.title("📚 メニュー")
+
+if st.sidebar.button("🎮 ゲームに戻る"):
+    st.session_state.mode = "game"
+    st.rerun()
+
+if st.sidebar.button("📖 復習モード"):
+    st.session_state.mode = "review"
+    st.rerun()
+
+def save_wrong_answer(q):
+    res = supabase.table("wrong_answers") \
+        .select("*") \
+        .eq("question_id", q["id"]) \
+        .execute()
+
+    if res.data:
+        supabase.table("wrong_answers") \
+            .update({
+                "wrong_count": res.data[0]["wrong_count"] + 1
+            }) \
+            .eq("question_id", q["id"]) \
+            .execute()
+    else:
+        supabase.table("wrong_answers") \
+            .insert({
+                "question_id": q["id"],
+                "question_text": q["q"],
+                "stage": st.session_state.stage,
+                "wrong_count": 1
+            }) \
+            .execute()
+
+
+def load_ranking():
+    res = supabase.table("wrong_answers") \
+        .select("*") \
+        .order("wrong_count", desc=True) \
+        .limit(10) \
+        .execute()
+    return res.data
 
 
 quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
@@ -70,6 +118,57 @@ if st.session_state.mode == "clear":
     if st.button("🔄 もう一度遊ぶ"):
         for key in list(st.session_state.keys()):
             del st.session_state[key]
+        st.rerun()
+
+    st.stop()
+
+if st.session_state.mode == "review":
+    st.title("📖 復習モード")
+    st.write("間違えた回数が多い問題から優先的に復習しよう🔥")
+
+    ranking = load_ranking()
+
+    if not ranking:
+        st.info("まだ間違えた問題がありません")
+        st.stop()
+
+    for i, r in enumerate(ranking, 1):
+        with st.expander(f"🥇 {i}位｜{r['wrong_count']}回ミス（Stage {r['stage']}）"):
+            st.code(r["question_text"])
+
+            if st.button(f"🧠 この問題を復習する", key=r["question_id"]):
+                st.session_state.current_question = {
+                    "id": r["question_id"],
+                    "q": r["question_text"],
+                }
+                st.session_state.mode = "review_question"
+                st.rerun()
+
+    st.stop()
+    
+if st.session_state.mode == "review_question":
+    q = st.session_state.current_question
+
+    st.title("🧠 復習問題")
+    st.code(q["q"])
+
+    # 元のクイズデータから完全な問題を取得
+    all_quiz = stage1_quiz + stage2_quiz
+    full_q = next(item for item in all_quiz if item["id"] == q["id"])
+
+    choice = st.radio("選択肢", full_q["choices"])
+
+    if st.button("答える"):
+        if choice == full_q["answer"]:
+            st.success("⭕ 正解！")
+        else:
+            st.error("❌ 不正解")
+            st.write(f"✅ 正解：{full_q['answer']}")
+
+        st.info(f"📝 解説：{full_q['explanation']}")
+
+    if st.button("⬅ 復習一覧に戻る"):
+        st.session_state.mode = "review"
         st.rerun()
 
     st.stop()
@@ -150,8 +249,12 @@ if st.button("回答する") and not st.session_state.answered:
         st.session_state.life -= 1
         st.session_state.wrong_questions.append(q)
 
+        # 🔥 Supabaseに保存
+        save_wrong_answer(q)
+
     st.session_state.answered = True
     st.rerun()
+
 
 # ----------------------------
 # 次の問題へ
