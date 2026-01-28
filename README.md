@@ -47,9 +47,33 @@ Streamlit を使用して作成した、**ゲーム感覚で Python を学べる
 #### 1. 必要なライブラリのインストール
 ```bash
 pip install streamlit supabase
+```
 
-#### 2.アプリの起動
+2.アプリの起動
 以下のコマンドでアプリを起動します。
 ```bash
 streamlit run app.py
+```
+*クイズデータはアプリ内にquiz_data.pyという形で保管されています。
 
+---
+## 📊 データの仕組み
+
+このアプリは **Supabase** を使用して学習履歴を管理しています。
+保存される内容は以下の通りです。
+*問題ID
+*問題文
+*ステージ番号
+*間違えた回数
+これにより、
+「どの問題を何回間違えたか」を可視化し、
+復習モードで苦手な問題から優先的に学習できます。
+
+---
+
+## 💻 使用技術
+
+* **Frontend/UI**: [Streamlit](https://streamlit.io/)
+* **Database**: [Supabase](https://supabase.com/)
+
+---
