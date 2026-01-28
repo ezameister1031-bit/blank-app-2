@@ -43,8 +43,6 @@ if st.sidebar.button("📖 復習モード"):
 
 
 def save_wrong_answer(q):
-    st.write("DEBUG question:", q)
-
     res = supabase.table("wrong_answers") \
         .select("*") \
         .eq("question_id", q["id"]) \
