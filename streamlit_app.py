@@ -164,7 +164,7 @@ if st.session_state.mode == "review":
         st.stop()
 
     for i, r in enumerate(ranking, 1):
-        with st.expander(f"🥇 {i}位｜{r['wrong_count']}回ミス（Stage {r['stage']}）"):
+        with st.expander(f"{i}位｜{r['wrong_count']}回ミス（Stage {r['stage']}）"):
             st.code(r["question_text"])
 
             if st.button(f"🧠 この問題を復習する", key=r["question_id"]):
