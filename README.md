@@ -60,7 +60,7 @@ streamlit run streamlit_app.py
 - Stage1→stage1_quizから出題
 - Stage2→stage2_quizから出題
 
-**quiz_data.py のフォーマット例:**
+
 #### quiz_data.py のフォーマット例
 
 | キー名 | 内容 | 例 |
