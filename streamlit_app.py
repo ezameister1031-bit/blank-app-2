@@ -14,17 +14,16 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+# --- session_state 初期化 ---
 if "ai_hint" not in st.session_state:
     st.session_state.ai_hint = None
 
 if "hint_requested" not in st.session_state:
     st.session_state.hint_requested = False
-    
-if "hint_used" not in st.session_state:
-    st.session_state.hint_used = False
 
-if "current_question_id" not in st.session_state:
-    st.session_state.current_question_id = None
+if "hint_generating" not in st.session_state:
+    st.session_state.hint_generating = False
+
 
 def init_state():
     defaults = {
