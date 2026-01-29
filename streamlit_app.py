@@ -14,6 +14,12 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
+if "ai_hint" not in st.session_state:
+    st.session_state.ai_hint = None
+
+if "hint_used" not in st.session_state:
+    st.session_state.hint_used = False
+
 def init_state():
     defaults = {
         "mode": "game",
@@ -275,6 +281,8 @@ st.write(f"❤️ ライフ：{st.session_state.life}")
 # 問題をランダム取得
 if st.session_state.current_question is None:
     st.session_state.current_question = random.choice(quiz_data)
+    st.session_state.ai_hint = None
+    st.session_state.hint_used = False
 
 q = st.session_state.current_question
 
@@ -283,12 +291,14 @@ st.code(q["q"])
 #ヒントボタン
 if not st.session_state.hint_requested:
     if st.button("💡 ヒントを見る"):
-        with st.spinner("🤖 AIがヒントを考えています..."):
-            st.session_state.ai_hint = generate_hint(q["q"])
-            st.session_state.hint_requested = True
-        st.rerun()
-if st.session_state.ai_hint:
-    st.info(f"💡 AIヒント\n\n{st.session_state.ai_hint}")
+    if not st.session_state.hint_used:
+        st.session_state.ai_hint = generate_hint(q["q"])
+        st.session_state.hint_used = True
+    else:
+        st.info("この問題ではすでにヒントを使っています")
+
+    if st.session_state.ai_hint:
+        st.info(f"🤖 ヒント：{st.session_state.ai_hint}")
 
 choice = st.radio("選択肢", q["choices"], key="choice")
 
@@ -333,6 +343,10 @@ if st.session_state.answered:
         st.session_state.answered = False
         st.session_state.ai_hint = None
         st.session_state.hint_requested = False
+                # 🔥 ヒントをリセット
+        st.session_state.ai_hint = None
+        st.session_state.hint_used = False
+
 
 
         if st.session_state.life <= 0:
