@@ -293,15 +293,16 @@ st.subheader("❓ 問題")
 st.code(q["q"])
 #ヒントボタン
 if not st.session_state.hint_requested:
-    if st.button("💡 ヒントを見る"):
-        if not st.session_state.hint_used:
-            st.session_state.ai_hint = generate_hint(q["q"])
-            st.session_state.hint_used = True
-        else:
-            st.info("この問題ではすでにヒントを使っています")
+    if st.button(
+    "💡 ヒントを見る",
+    disabled=st.session_state.hint_used
+):
+    st.session_state.ai_hint = generate_hint(q["q"])
+    st.session_state.hint_used = True
 
-    if st.session_state.ai_hint:
-        st.info(f"🤖 ヒント：{st.session_state.ai_hint}")
+
+if st.session_state.ai_hint:
+    st.info(f"🤖 ヒント：{st.session_state.ai_hint}")
 
 choice = st.radio("選択肢", q["choices"], key="choice")
 
