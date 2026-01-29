@@ -5,6 +5,8 @@ from quiz_data import stage1_quiz,stage2_quiz
 # 初期化
 # ----------------------------
 from supabase import create_client
+from openai import OpenAI
+
 
 SUPABASE_URL = "https://uidimomhqldplhtvbchz.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZGltb21ocWxkcGxodHZiY2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjAyOTksImV4cCI6MjA4NDU5NjI5OX0.mzoug_p5WpFFQTUq-TTsffA8n7uRI77IqdZpAR5pTYg"
