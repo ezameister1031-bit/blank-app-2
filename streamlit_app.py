@@ -20,6 +20,9 @@ if "ai_hint" not in st.session_state:
 if "hint_used" not in st.session_state:
     st.session_state.hint_used = False
 
+if "current_question_id" not in st.session_state:
+    st.session_state.current_question_id = None
+
 def init_state():
     defaults = {
         "mode": "game",
