@@ -93,26 +93,23 @@ def load_ranking():
         .execute()
     return res.data
 #AIからのヒント表示
-def generate_hint(question_text):
-    prompt = f"""
-あなたはPython初心者向けの先生です。
-次の問題について、答えを直接言わずに
-「考え方のヒント」を1つだけ日本語で出してください。
+from openai import RateLimitError
 
-問題:
-{question_text}
-"""
+def generate_hint(question):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful tutor."},
+                {"role": "user", "content": f"Give a short hint for this question:\n{question}"}
+            ],
+            max_tokens=80
+        )
+        return response.choices[0].message.content
 
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "あなたは優しいPython講師です。"},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.7
-    )
+    except RateLimitError:
+        return "⚠️ ヒントの取得回数が上限に達しました。しばらく待ってからもう一度試してください。"
 
-    return response.choices[0].message.content
 
 quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
 
@@ -300,11 +297,20 @@ if st.session_state.get("prev_q_id") != q["id"]:
 st.subheader("❓ 問題")
 st.code(q["q"])
 #ヒントボタン
-if not st.session_state.hint_requested:
-    if st.button("ヒントを見る"):
-        st.session_state.hint_requested = True
-    if st.session_state.hint_requested and st.session_state.ai_hint is None:
-        st.session_state.ai_hint = generate_hint(q["q"])
+
+if st.button("ヒントを見る") and not st.session_state.hint_generating:
+    st.session_state.hint_requested = True
+    st.session_state.hint_generating = True
+
+    # --- AIヒント生成（API呼び出しはここだけ）---
+if (
+    st.session_state.hint_requested
+    and st.session_state.ai_hint is None
+    and st.session_state.hint_generating
+):
+    st.session_state.ai_hint = generate_hint(q["q"])
+    st.session_state.hint_generating = False
+
 
 
 if st.session_state.ai_hint:
