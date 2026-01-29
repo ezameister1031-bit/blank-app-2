@@ -12,6 +12,7 @@ SUPABASE_URL = "https://uidimomhqldplhtvbchz.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZGltb21ocWxkcGxodHZiY2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjAyOTksImV4cCI6MjA4NDU5NjI5OX0.mzoug_p5WpFFQTUq-TTsffA8n7uRI77IqdZpAR5pTYg"
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def init_state():
     defaults = {
@@ -26,6 +27,9 @@ def init_state():
         "answered": False,
         "next_stage": 2,
         "bgm_on": True,
+        "ai_hint": None,
+        "hint_requested": False,
+
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -76,7 +80,27 @@ def load_ranking():
         .limit(10) \
         .execute()
     return res.data
+#AIからのヒント表示
+def generate_hint(question_text):
+    prompt = f"""
+あなたはPython初心者向けの先生です。
+次の問題について、答えを直接言わずに
+「考え方のヒント」を1つだけ日本語で出してください。
 
+問題:
+{question_text}
+"""
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "あなたは優しいPython講師です。"},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.7
+    )
+
+    return response.choices[0].message.content
 
 quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
 
@@ -256,6 +280,15 @@ q = st.session_state.current_question
 
 st.subheader("❓ 問題")
 st.code(q["q"])
+#ヒントボタン
+if not st.session_state.hint_requested:
+    if st.button("💡 ヒントを見る"):
+        with st.spinner("🤖 AIがヒントを考えています..."):
+            st.session_state.ai_hint = generate_hint(q["q"])
+            st.session_state.hint_requested = True
+        st.rerun()
+if st.session_state.ai_hint:
+    st.info(f"💡 AIヒント\n\n{st.session_state.ai_hint}")
 
 choice = st.radio("選択肢", q["choices"], key="choice")
 
@@ -298,6 +331,9 @@ if st.session_state.answered:
         st.session_state.result_message = ""
         st.session_state.result_type = ""
         st.session_state.answered = False
+        st.session_state.ai_hint = None
+        st.session_state.hint_requested = False
+
 
         if st.session_state.life <= 0:
             st.session_state.mode = "game_over"
