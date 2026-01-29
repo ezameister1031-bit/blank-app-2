@@ -295,10 +295,9 @@ st.code(q["q"])
 if not st.session_state.hint_requested:
     if st.button(
     "💡 ヒントを見る",
-    disabled=st.session_state.hint_used
-):
-    st.session_state.ai_hint = generate_hint(q["q"])
-    st.session_state.hint_used = True
+    disabled=st.session_state.hint_used):
+        st.session_state.ai_hint = generate_hint(q["q"])
+        st.session_state.hint_used = True
 
 
 if st.session_state.ai_hint:
