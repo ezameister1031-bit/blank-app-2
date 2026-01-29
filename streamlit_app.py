@@ -17,6 +17,9 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 if "ai_hint" not in st.session_state:
     st.session_state.ai_hint = None
 
+if "hint_requested" not in st.session_state:
+    st.session_state.hint_requested = False
+    
 if "hint_used" not in st.session_state:
     st.session_state.hint_used = False
 
@@ -289,15 +292,19 @@ if st.session_state.current_question is None:
 
 q = st.session_state.current_question
 
+# ⑤ 問題が変わったらリセット
+if st.session_state.get("prev_q_id") != q["id"]:
+    st.session_state.ai_hint = None
+    st.session_state.hint_requested = False
+    st.session_state.prev_q_id = q["id"]
 st.subheader("❓ 問題")
 st.code(q["q"])
 #ヒントボタン
 if not st.session_state.hint_requested:
-    if st.button(
-    "💡 ヒントを見る",
-    disabled=st.session_state.hint_used):
+    if st.button("ヒントを見る"):
+        st.session_state.hint_requested = True
+    if st.session_state.hint_requested and st.session_state.ai_hint is None:
         st.session_state.ai_hint = generate_hint(q["q"])
-        st.session_state.hint_used = True
 
 
 if st.session_state.ai_hint:
