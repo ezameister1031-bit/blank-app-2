@@ -5,25 +5,11 @@ from quiz_data import stage1_quiz,stage2_quiz
 # 初期化
 # ----------------------------
 from supabase import create_client
-from openai import OpenAI
-
 
 SUPABASE_URL = "https://uidimomhqldplhtvbchz.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVpZGltb21ocWxkcGxodHZiY2h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkwMjAyOTksImV4cCI6MjA4NDU5NjI5OX0.mzoug_p5WpFFQTUq-TTsffA8n7uRI77IqdZpAR5pTYg"
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-# --- session_state 初期化 ---
-if "ai_hint" not in st.session_state:
-    st.session_state.ai_hint = None
-
-if "hint_requested" not in st.session_state:
-    st.session_state.hint_requested = False
-
-if "hint_generating" not in st.session_state:
-    st.session_state.hint_generating = False
-
 
 def init_state():
     defaults = {
@@ -38,9 +24,6 @@ def init_state():
         "answered": False,
         "next_stage": 2,
         "bgm_on": True,
-        "ai_hint": None,
-        "hint_requested": False,
-
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -91,23 +74,6 @@ def load_ranking():
         .limit(10) \
         .execute()
     return res.data
-#AIからのヒント表示
-from openai import RateLimitError
-
-def generate_hint(question):
-    try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful tutor."},
-                {"role": "user", "content": f"Give a short hint for this question:\n{question}"}
-            ],
-            max_tokens=80
-        )
-        return response.choices[0].message.content
-
-    except RateLimitError:
-        return "⚠️ ヒントの取得回数が上限に達しました。しばらく待ってからもう一度試してください。"
 
 
 quiz_data = stage1_quiz if st.session_state.stage == 1 else stage2_quiz
@@ -283,37 +249,11 @@ st.write(f"❤️ ライフ：{st.session_state.life}")
 # 問題をランダム取得
 if st.session_state.current_question is None:
     st.session_state.current_question = random.choice(quiz_data)
-    st.session_state.ai_hint = None
-    st.session_state.hint_used = False
 
 q = st.session_state.current_question
 
-# ⑤ 問題が変わったらリセット
-if st.session_state.get("prev_q_id") != q["id"]:
-    st.session_state.ai_hint = None
-    st.session_state.hint_requested = False
-    st.session_state.prev_q_id = q["id"]
 st.subheader("❓ 問題")
 st.code(q["q"])
-#ヒントボタン
-
-if st.button("ヒントを見る") and not st.session_state.hint_generating:
-    st.session_state.hint_requested = True
-    st.session_state.hint_generating = True
-
-    # --- AIヒント生成（API呼び出しはここだけ）---
-if (
-    st.session_state.hint_requested
-    and st.session_state.ai_hint is None
-    and st.session_state.hint_generating
-):
-    st.session_state.ai_hint = generate_hint(q["q"])
-    st.session_state.hint_generating = False
-
-
-
-if st.session_state.ai_hint:
-    st.info(f"🤖 ヒント：{st.session_state.ai_hint}")
 
 choice = st.radio("選択肢", q["choices"], key="choice")
 
@@ -356,13 +296,6 @@ if st.session_state.answered:
         st.session_state.result_message = ""
         st.session_state.result_type = ""
         st.session_state.answered = False
-        st.session_state.ai_hint = None
-        st.session_state.hint_requested = False
-                # 🔥 ヒントをリセット
-        st.session_state.ai_hint = None
-        st.session_state.hint_used = False
-
-
 
         if st.session_state.life <= 0:
             st.session_state.mode = "game_over"
